@@ -9,8 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🪖 Helmet Detection System")
-st.markdown("Upload an image to detect **Helmet / No Helmet** using CV + ML")
+st.title("Helmet Detection System")
 
 conf_threshold = st.slider("Confidence Threshold", 0.1, 0.9, 0.5, 0.05)
 
@@ -60,3 +59,4 @@ if uploaded_file:
             st.success(
                 f"Helmet: {helmet_count} | No Helmet: {no_helmet_count}"
             )
+

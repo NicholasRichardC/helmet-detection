@@ -1,12 +1,8 @@
-# detector.py
 import cv2
 import numpy as np
 import joblib
 from skimage.feature import hog, local_binary_pattern
 
-# =========================
-# CONFIG
-# =========================
 MODEL_DIR = "models"
 
 FACE_CASCADE_PATH = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
@@ -19,15 +15,9 @@ HELMET_HEIGHT_SCALE = 1.5
 
 FEATURE_SIZE = (64, 64)
 
-# =========================
-# LOAD CASCADES
-# =========================
 face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
 profile_cascade = cv2.CascadeClassifier(PROFILE_CASCADE_PATH)
 
-# =========================
-# LOAD MODEL (LAZY)
-# =========================
 _clf = None
 _scaler = None
 
@@ -38,9 +28,7 @@ def load_models():
         _scaler = joblib.load(f"{MODEL_DIR}/scaler.pkl")
     return _clf, _scaler
 
-# =========================
-# FACE DETECTION
-# =========================
+
 def detect_faces(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -55,9 +43,6 @@ def detect_faces(image):
 
     return faces
 
-# =========================
-# HELMET REGION
-# =========================
 def get_helmet_region(face_bbox, img_shape):
     fx, fy, fw, fh = face_bbox
     h, w = img_shape[:2]
@@ -74,9 +59,6 @@ def get_helmet_region(face_bbox, img_shape):
 
     return hx, hy, hw, hh
 
-# =========================
-# FEATURE EXTRACTION
-# =========================
 def extract_helmet_features(roi):
     roi = cv2.resize(roi, FEATURE_SIZE)
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
@@ -110,9 +92,6 @@ def extract_helmet_features(roi):
 
     return np.array(features)
 
-# =========================
-# MAIN DETECTION
-# =========================
 def detect_helmets(image, conf_threshold=0.5):
     clf, scaler = load_models()
     faces = detect_faces(image)
@@ -139,3 +118,4 @@ def detect_helmets(image, conf_threshold=0.5):
         })
 
     return results
+
